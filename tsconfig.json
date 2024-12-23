@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+   
+    
+    "target": "es2017",                                
+    
+    "module": "commonjs",                                
+      "esModuleInterop": true,                            
+                          
+    "forceConsistentCasingInFileNames": true,            
+
+    "strict": true,                                     
+    "skipLibCheck": true , 
+    "jsx": "react",
+    "types": ["jest"],
+    "sourceMap": false,
+     // or 'es2019', 'es2020', etc.
+    "lib": ["dom", "es2017"],
+   
+
+                                 
+  }
+}
