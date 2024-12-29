@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";  // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 interface FormDataType {
@@ -22,7 +22,7 @@ const AddCandidate: React.FC = () => {
     resume: null,
   });
 
-  const navigate = useNavigate();  // Initialize navigate
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const target = e.target as HTMLInputElement;
@@ -34,6 +34,12 @@ const AddCandidate: React.FC = () => {
       setFormData((prevData) => ({ ...prevData, [name]: target.files?.[0] || null }));
     } else {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFormData({ ...formData, resume: e.target.files[0] });
     }
   };
 
@@ -54,9 +60,8 @@ const AddCandidate: React.FC = () => {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
-      
       alert("Candidate added successfully!");
-      navigate("/view-candidates");  // Redirect to ViewCandidate page
+      navigate("/view-candidates");
     } catch (error) {
       console.error(error);
       alert("An error occurred while adding the candidate.");
@@ -65,10 +70,17 @@ const AddCandidate: React.FC = () => {
 
   return (
     <div className="container mt-5">
+      {/* View Candidates button */}
+      <div className="d-flex justify-content-end mb-3">
+        <button className="btn btn-secondary" onClick={() => navigate("/view-candidates")}>View Candidates</button>
+      </div>
+      
+      {/* Add Candidate Form */}
       <div className="d-flex justify-content-center">
-        <div className="card p-4" style={{ maxWidth: "800px", width: "100%" }}>
+        <div className="card p-4 shadow-lg" style={{ maxWidth: "800px", width: "100%" }}>
           <h2 className="text-center mb-4">Add Candidate</h2>
           <form onSubmit={handleSubmit}>
+            {/* Form Fields */}
             <div className="mb-3">
               <label htmlFor="name" className="form-label">Name</label>
               <input type="text" className="form-control" id="name" name="name" value={formData.name as string} onChange={handleChange} required />
@@ -130,17 +142,22 @@ const AddCandidate: React.FC = () => {
               </div>
               <div className="col-md-6">
                 <label htmlFor="resume" className="col-form-label">Resume</label>
-                <input type="file" className="form-control" id="resume" name="resume" onChange={handleChange} required />
+                <input type="file" className="form-control" id="resume" name="resume" onChange={handleFileChange} required />
+                {formData.resume && (
+                  <p className="mt-2">
+                    Current file: {formData.resume instanceof File ? formData.resume.name : formData.resume}
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="row">
-  <div className="col-12 text-center"> {/* Use col-12 for full width and text-center for centering */}
-    <button type="submit" className="btn btn-primary w-50"> {/* Use w-50 for a narrower width */}
-      Submit
-    </button>
-  </div>
-</div>
+              <div className="col-12 text-center">
+                <button type="submit" className="btn btn-primary w-50">
+                  Submit
+                </button>
+              </div>
+            </div>
 
           </form>
         </div>

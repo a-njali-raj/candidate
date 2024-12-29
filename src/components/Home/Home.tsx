@@ -22,6 +22,9 @@ const Home: React.FC = () => {
         root: {
           height: '100vh',
           backgroundColor: '#f3f2f1',
+          backgroundImage: 'url("../../assets/home.webp")', // URL of your background image
+          backgroundSize: 'cover', // Ensures the image covers the entire container
+          backgroundPosition: 'center center', // Centers the image
           padding: 20,
         },
       }}
