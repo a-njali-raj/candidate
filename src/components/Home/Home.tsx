@@ -7,7 +7,7 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
 
   const handleAddCandidate = () => {
-    navigate('/addcandidate'); 
+    navigate ('/addcandidate'); 
   };
 
   const handleViewCandidates = () => {

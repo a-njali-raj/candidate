@@ -1,19 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { CandidateInfo, fetchCandidate, updateCandidate } from "../../services/CandidateService";
 import axios from "axios";
-
-interface CandidateInfo {
-  name: string;
-  gender: string;
-  dob: string;
-  place: string;
-  phoneNumber: string;
-  highestEducationQualification: string;
-  qualificationPassoutYear: number;
-  marksObtainedPercentage: number;
-  haveAnyExperience: boolean;
-  resume: File | null;
-}
 
 const UpdateCandidate: React.FC = () => {
   const { id } = useParams();
@@ -32,24 +20,32 @@ const UpdateCandidate: React.FC = () => {
   });
 
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchCandidate = async () => {
+    const fetchCandidateDetails = async () => {
       try {
         const response = await axios.get(`https://localhost:7294/api/candidate/${id}`);
-        const candidateData = response.data;
-        if (candidateData.dob) {
-          candidateData.dob = candidateData.dob.split("T")[0]; // Extract only the date part
-        }
-        setCandidate(response.data);
+        const dob = response.data.dob ? formatDate(response.data.dob) : '';
+        
+        setCandidate({ ...response.data, dob }); // Format dob if necessary
         setLoading(false);
+       
       } catch (error) {
-        console.error("Error fetching candidate details:", error);
+        setError("Error fetching candidate details.");
+        setLoading(false);
       }
     };
-    fetchCandidate();
+
+    fetchCandidateDetails();
   }, [id]);
 
+  const formatDate = (date: string) => {
+    // Convert date if necessary, for example, if it comes as a timestamp or in MM/DD/YYYY format
+    // For now, assuming date is in MM/DD/YYYY or timestamp format, convert to YYYY-MM-DD
+    const parsedDate = new Date(date);
+    return parsedDate.toISOString().split('T')[0]; // YYYY-MM-DD
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     const newValue = type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
@@ -64,12 +60,8 @@ const UpdateCandidate: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData();
-    Object.entries(candidate).forEach(([key, value]) => {
-      formData.append(key, value as string | Blob);
-    });
     try {
-      await axios.put(`https://localhost:7294/api/update/${id}`, formData);
+      await updateCandidate(id, candidate);
       navigate("/view-candidates", { state: { successMessage: "Candidate details updated successfully!" } });
     } catch (error) {
       console.error("Error updating candidate details:", error);
@@ -219,21 +211,43 @@ const UpdateCandidate: React.FC = () => {
                 </div>
 
                 <div className="form-group mb-3">
-                  <label>Resume</label>
-                  <input
-                    type="file"
-                    name="resume"
-                    className="form-control-file"
-                    onChange={handleFileChange}
-                  />
-                </div>
+  <label>Resume</label>
+  {candidate.resume && (
+    <div>
+      <strong>Current Resume:</strong>
+      {/* Check if the resume is a File object */}
+      {typeof candidate.resume === 'string' ? (
+        <span>{candidate.resume}</span>
+      ) : (
+        <span>{candidate.resume?.name}</span> // If it's a File, show the file name
+      )}
+      <br />
+      
+    </div>
+  )}
+  <input
+    type="file"
+    name="resume"
+    className="form-control-file"
+    onChange={handleFileChange}
+  />
+</div>
 
-                <button
-                  type="submit"
-                  className="btn btn-primary btn-block mt-4"
-                >
-                  Update Candidate
-                </button>
+
+
+<div className="d-flex justify-content-between mt-4">
+  <button type="submit" className="btn btn-primary">
+    Update Candidate
+  </button>
+  <button
+    type="button"
+    className="btn btn-secondary"
+    onClick={() => navigate("/view-candidates")}
+  >
+    Cancel
+  </button>
+</div>
+
               </form>
             </div>
           </div>
