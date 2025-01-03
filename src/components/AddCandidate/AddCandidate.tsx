@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
+
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { addCandidate } from "../../services/CandidateService"; // Import the service method
+import { addCandidate } from "../../services/CandidateService"; 
 
 interface FormDataType {
   [key: string]: string | boolean | File | null;
@@ -38,7 +38,7 @@ const AddCandidate: React.FC = () => {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
 
-    // Validate on change
+   
     validateField(name, value);
   };
 
@@ -129,12 +129,12 @@ const AddCandidate: React.FC = () => {
       }
     });
 
-    // Check if there are any errors
+
     if (Object.values(errors).some((error) => error !== "")) {
       return;
     }
 
-    // Map the formData to the CandidateInfo structure
+   
     const candidateData = {
       name: formData.name as string,
       gender: formData.gender as string,
@@ -161,17 +161,17 @@ const AddCandidate: React.FC = () => {
 
   return (
     <div className="container mt-5">
-      {/* View Candidates button */}
+   
       <div className="d-flex justify-content-end mb-3">
         <button className="btn btn-secondary" onClick={() => navigate("/view-candidates")}>View Candidates</button>
       </div>
       
-      {/* Add Candidate Form */}
+     
       <div className="d-flex justify-content-center">
         <div className="card p-4 shadow-lg" style={{ maxWidth: "800px", width: "100%" }}>
           <h2 className="text-center mb-4">Add Candidate</h2>
           <form onSubmit={handleSubmit}>
-            {/* Form Fields */}
+          
             <div className="mb-3">
               <label htmlFor="name" className="form-label">Name</label>
               <input
