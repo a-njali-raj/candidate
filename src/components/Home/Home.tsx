@@ -22,14 +22,19 @@ const Home: React.FC = () => {
         root: {
           height: '100vh',
           backgroundColor: '#f3f2f1',
-          backgroundImage: 'url("../../assets/home.webp")', // URL of your background image
-          backgroundSize: 'cover', // Ensures the image covers the entire container
-          backgroundPosition: 'center center', // Centers the image
+         
+          backgroundSize: 'cover',
+          backgroundPosition: 'center center', 
           padding: 20,
         },
       }}
     >
-      <Text variant="xxLarge" styles={{ root: { marginBottom: 20, fontWeight: 600 } }}>
+      <Text variant="xxLarge" styles={{ root: { marginBottom: 20, fontWeight: 600, selectors: { 
+        ':hover': { 
+          color: 'grey' 
+        } 
+      }}
+       }}>
         Welcome to the Candidate Management System
       </Text>
       <Stack

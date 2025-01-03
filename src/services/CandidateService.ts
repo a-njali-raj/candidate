@@ -32,7 +32,7 @@ export const fetchCandidate = async (id: string | undefined): Promise<CandidateI
   const response = await axios.get(`${API_BASE_URL}/candidate/${id}`);
   const candidateData = response.data;
   if (candidateData.dob) {
-    candidateData.dob = candidateData.dob.split("T")[0]; // Extract only the date part
+    candidateData.dob = candidateData.dob.split("T")[0]; 
   }
   return candidateData;
 };
@@ -43,4 +43,13 @@ export const updateCandidate = async (id: string | undefined, candidate: Candida
     formData.append(key, value as string | Blob);
   });
   await axios.put(`${API_BASE_URL}/update/${id}`, formData);
+};
+
+export const deleteCandidate = async (id: number): Promise<void> => {
+  await axios.delete(`${API_BASE_URL}/delete/${id}`);
+};
+
+export const fetchCandidates = async (): Promise<CandidateInfo[]> => {
+  const response = await axios.get(`${API_BASE_URL}/candidates`);
+  return response.data;
 };

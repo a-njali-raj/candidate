@@ -15,7 +15,7 @@ interface CandidateDetails {
   qualificationPassoutYear: number;
   marksObtainedPercentage: number;
   haveAnyExperience: boolean;
-  resume: string | null; // Path to resume (relative or full URL)
+  resume: string | null;
 }
 
 const CandidateDetails: React.FC = () => {

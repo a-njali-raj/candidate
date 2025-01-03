@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
-import axios from "axios";
+import { fetchCandidates, deleteCandidate } from "../../services/CandidateService"; // Importing service functions
 import Toaster from "../Toaster/Toaster";
-import "bootstrap/dist/css/bootstrap.min.css"; // Ensure Bootstrap is imported for styles
+import "bootstrap/dist/css/bootstrap.min.css"; 
+
 
 interface Candidate {
-  candidateID: number;
+  candidateID: number; 
   name: string;
 }
 
@@ -15,20 +16,24 @@ const ViewCandidate: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchCandidates = async () => {
+    const fetchCandidatesData = async () => {
       try {
-        const response = await axios.get("https://localhost:7294/api/candidates");
-        setCandidates(response.data);
+        const data = await fetchCandidates(); 
+  
+        const candidatesWithID = data.map((candidate, index) => ({
+          candidateID: index + 1, 
+          ...candidate,
+        }));
+        setCandidates(candidatesWithID);
       } catch (error) {
         console.error("Error fetching candidates:", error);
       }
     };
-    fetchCandidates();
+    fetchCandidatesData();
 
-    // Display success message if available in location state
+
     if (location.state?.successMessage) {
       setSuccessMessage(location.state.successMessage);
-      // Clear success message from history state
       window.history.replaceState({}, document.title);
     }
   }, [location]);
@@ -38,7 +43,7 @@ const ViewCandidate: React.FC = () => {
     
     if (isConfirmed) {
       try {
-        await axios.delete(`https://localhost:7294/api/delete/${id}`);
+        await deleteCandidate(id); 
         setCandidates(candidates.filter(candidate => candidate.candidateID !== id));
         setSuccessMessage("Candidate deleted successfully.");
       } catch (error) {
@@ -47,10 +52,8 @@ const ViewCandidate: React.FC = () => {
       }
     }
   };
-
   return (
     <div className="container mt-5">
-      {/* Toaster for success message */}
       {successMessage && <Toaster message={successMessage} onClose={() => setSuccessMessage(null)} />}
 
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -81,16 +84,15 @@ const ViewCandidate: React.FC = () => {
                       <i className="bi bi-eye"></i> View
                     </Link>
                     <Link
-  to={`/candidate/update/${candidate.candidateID}`}
-  className="btn-sm me-2"
->
-  <i className="bi bi-pencil" style={{ fontSize: "1.25rem" ,color:"black"}}></i>
-</Link>
-
+                      to={`/candidate/update/${candidate.candidateID}`}
+                      className="btn-sm me-2"
+                    >
+                      <i className="bi bi-pencil" style={{ fontSize: "1.25rem", color: "black" }}></i>
+                    </Link>
                     <i
                       className="bi bi-trash-fill text-danger"
                       style={{ fontSize: "1.25rem", cursor: "pointer" }}
-                      onClick={() => handleDelete(candidate.candidateID)} // Call delete handler
+                      onClick={() => handleDelete(candidate.candidateID)} 
                     ></i>
                   </td>
                 </tr>
