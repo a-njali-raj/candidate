@@ -125,7 +125,7 @@ const UpdateCandidate: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate all fields before submission
+  
     let isValid = true;
     Object.keys(candidate).forEach((field) => {
       validateField(field, (candidate as any)[field]);
@@ -323,6 +323,7 @@ const UpdateCandidate: React.FC = () => {
                   <input
                     type="file"
                     name="resume"
+                    accept=".pdf"
                     className="form-control-file"
                     onChange={handleFileChange}
                   />

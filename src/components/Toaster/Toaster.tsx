@@ -9,7 +9,7 @@ const Toaster: React.FC<ToasterProps> = ({ message, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
-    }, 3000); // Toaster disappears after 3 seconds
+    }, 3000); 
     return () => clearTimeout(timer);
   }, [onClose]);
 
@@ -22,10 +22,10 @@ const Toaster: React.FC<ToasterProps> = ({ message, onClose }) => {
 
 const toasterStyle: React.CSSProperties = {
   position: "fixed",
-  top: "10%", // Position toaster at the top
+  top: "10%", 
   left: "50%",
-  transform: "translateX(-50%)", // Horizontal center alignment
-  backgroundColor: "#4CAF50", // Green for success
+  transform: "translateX(-50%)", 
+  backgroundColor: "#4CAF50",
   color: "white",
   padding: "10px 20px",
   borderRadius: "5px",

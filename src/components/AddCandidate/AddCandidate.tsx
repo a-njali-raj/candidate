@@ -2,7 +2,8 @@ import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { addCandidate } from "../../services/CandidateService"; 
+import { addCandidate, checkEmailAvailability, checkPhoneAvailability } from "../../services/CandidateService"; 
+import axios from "axios";
 
 interface FormDataType {
   [key: string]: string | boolean | File | null;
@@ -25,6 +26,52 @@ const AddCandidate: React.FC = () => {
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+
+  const handleEmailChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const emailValue = event.target.value;
+    setFormData({ ...formData, email: emailValue });
+
+    if (!emailValue) {
+      setEmailError("");  
+      return;
+    }
+
+    try {
+      const emailExists = await checkEmailAvailability(emailValue);
+      if (emailExists) {
+        setEmailError("Email already registered");
+      } else {
+        setEmailError("");  
+      }
+    } catch (error) {
+      setEmailError("Error checking email, please try again.");
+    }
+  };
+
+  const handlePhoneChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const phoneValue = event.target.value;
+    setFormData({ ...formData, phoneNumber: phoneValue });
+
+    if (!phoneValue) {
+      setPhoneError("");  
+      return;
+    }
+
+    try {
+      const phoneExists = await checkPhoneAvailability(phoneValue);
+      if (phoneExists) {
+        setPhoneError("Phone number already registered");
+      } else {
+        setPhoneError("");  
+      }
+    } catch (error) {
+      setPhoneError("Error checking phone number, please try again.");
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const target = e.target as HTMLInputElement;
@@ -163,7 +210,7 @@ const AddCandidate: React.FC = () => {
     <div className="container mt-5">
    
       <div className="d-flex justify-content-end mb-3">
-        <button className="btn btn-secondary" onClick={() => navigate("/view-candidates")}>View Candidates</button>
+        <button className="btn btn-primary" onClick={() => navigate("/view-candidates")}>View Candidates</button>
       </div>
       
      
@@ -211,11 +258,12 @@ const AddCandidate: React.FC = () => {
                   className="form-control"
                   id="email"
                   name="email"
-                  value={formData.email as string}
-                  onChange={handleChange}
+                  value={formData.email as string} 
+                  onChange={handleEmailChange} 
                   required
                 />
                 {errors.email && <div className="text-danger">{errors.email}</div>}
+                {emailError && <span style={{ color: "red" }}>{emailError}</span>}
               </div>
             </div>
 
@@ -256,10 +304,11 @@ const AddCandidate: React.FC = () => {
                   className="form-control"
                   id="phoneNumber"
                   name="phoneNumber"
-                  value={formData.phoneNumber as string}
-                  onChange={handleChange}
+                  value={formData.phoneNumber as string} 
+                  onChange={handlePhoneChange} 
                   required
                 />
+                {phoneError  && <span style={{ color: "red" }}>{phoneError}</span>}
                 {errors.phoneNumber && <div className="text-danger">{errors.phoneNumber}</div>}
               </div>
               <div className="col-md-6">
@@ -313,7 +362,7 @@ const AddCandidate: React.FC = () => {
                 className="form-control"
                 id="resume"
                 name="resume"
-                accept=".pdf,.doc,.docx"
+                accept=".pdf"
                 onChange={handleFileChange}
                 required
               />

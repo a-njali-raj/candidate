@@ -70,9 +70,11 @@ const CandidateDetails: React.FC = () => {
   return (
     <div style={{ padding: "20px", display: "flex", justifyContent: "center" }}>
       <Stack tokens={stackTokens} styles={stackStyles}>
-        <Link to="/view-candidates">
-          <PrimaryButton text="Back to List" />
-        </Link>
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Link to="/view-candidates">
+            <PrimaryButton text="Back to List" />
+          </Link>
+        </div>
 
         <Text variant="xxLarge" styles={{ root: { textAlign: "center" } }} block>
           Candidate Details
