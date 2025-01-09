@@ -116,9 +116,11 @@ const ViewCandidate: React.FC = () => {
                       ></i>
                     </Link>
                     <i
+                   
                       className="bi bi-trash-fill text-danger"
                       style={{ fontSize: "1.25rem", cursor: "pointer" }}
                       onClick={() => handleDelete(candidate.candidateID)}
+                      data-testid={`delete-button-${candidate.candidateID}`} 
                     ></i>
                   </td>
                 </tr>

@@ -7,7 +7,7 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
 
   const handleAddCandidate = () => {
-    navigate ('/addcandidate'); 
+    navigate('/addcandidate');
   };
 
   const handleViewCandidates = () => {
@@ -22,19 +22,26 @@ const Home: React.FC = () => {
         root: {
           height: '100vh',
           backgroundColor: '#f3f2f1',
-         
           backgroundSize: 'cover',
-          backgroundPosition: 'center center', 
+          backgroundPosition: 'center center',
           padding: 20,
         },
       }}
     >
-      <Text variant="xxLarge" styles={{ root: { marginBottom: 20, fontWeight: 600, selectors: { 
-        ':hover': { 
-          color: 'grey' 
-        } 
-      }}
-       }}>
+      <Text
+        variant="xxLarge"
+        styles={{
+          root: {
+            marginBottom: 20,
+            fontWeight: 600,
+            selectors: {
+              ':hover': {
+                color: 'grey',
+              },
+            },
+          },
+        }}
+      >
         Welcome to the Candidate Management System
       </Text>
       <Stack
@@ -45,6 +52,7 @@ const Home: React.FC = () => {
         <PrimaryButton
           text="Add Candidate"
           onClick={handleAddCandidate}
+          id="add-candidate-btn"
           styles={{
             root: { height: 40, padding: '0 20px' },
           }}
@@ -52,6 +60,7 @@ const Home: React.FC = () => {
         <PrimaryButton
           text="View Registered Candidates"
           onClick={handleViewCandidates}
+          id="view-candidates-btn"
           styles={{
             root: { height: 40, padding: '0 20px' },
           }}

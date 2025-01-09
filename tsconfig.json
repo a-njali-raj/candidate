@@ -12,11 +12,12 @@
     "strict": true,                                     
     "skipLibCheck": true , 
     "jsx": "react",
-    "types": ["jest"],
+    "types": ["jest", "node"],
     "sourceMap": false,
      // or 'es2019', 'es2020', etc.
     "lib": ["dom", "es2017"],
-   
+   "resolveJsonModule": true, // If you need to import JSON files in tests
+ "isolatedModules": true
 
                                  
   }
